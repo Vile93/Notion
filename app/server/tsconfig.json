@@ -1,0 +1,12 @@
+{
+    "include": ["src"],
+    "exclude": ["dist", "node_modules"],
+    "compilerOptions": {
+        "target": "es6",
+        "module": "CommonJS",
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "strict": true,
+        "esModuleInterop": true
+    }
+}
