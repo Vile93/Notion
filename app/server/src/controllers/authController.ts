@@ -11,45 +11,45 @@ export const AuthController = {
         try {
             const { password, email } = req.body;
             const candidate = await UserModel.findOne({ email });
-            if (candidate) {
-                const isCorrectPassword = await BcryptService.validateValues(
-                    candidate.password,
-                    password
-                );
-
-                if (isCorrectPassword) {
-                    const tokens = TokenService.createTokens({
-                        _id: candidate.id,
-                    });
-
-                    if (!tokens) {
-                        errorHandler(res);
-                        return;
-                    }
-                    const refreshToken = await TokenModel.findOneAndUpdate(
-                        { userId: candidate._id },
-                        {
-                            token: tokens.refreshToken,
-                        },
-                        { new: true }
-                    );
-                    if (!refreshToken) {
-                        errorHandler(res);
-                        return;
-                    }
-                    res.cookie('refreshToken', refreshToken.token, {
-                        maxAge: 30 * 24 * 60 * 60 * 1000,
-                        httpOnly: true,
-                    });
-                    res.status(200).json({ token: tokens.accessToken });
-                    return;
-                } else {
-                    res.status(400).json({ message: 'Incorrect password' });
-                    return;
-                }
-            } else {
+            if (!candidate) {
                 errorHandler(res, 404, 'User not found');
+                return;
             }
+
+            const isCorrectPassword = await BcryptService.validateValues(
+                candidate.password,
+                password
+            );
+
+            if (!isCorrectPassword) {
+                errorHandler(res, 400, 'Incorrect password');
+                return;
+            }
+            const tokens = TokenService.createTokens({
+                userId: candidate.id,
+            });
+
+            if (!tokens) {
+                errorHandler(res);
+                return;
+            }
+            const refreshToken = await TokenModel.findOneAndUpdate(
+                { userId: candidate.id },
+                {
+                    token: tokens.refreshToken,
+                },
+                { new: true }
+            );
+            if (!refreshToken) {
+                errorHandler(res);
+                return;
+            }
+            res.cookie('refreshToken', refreshToken.token, {
+                maxAge: 30 * 24 * 60 * 60 * 1000,
+                httpOnly: true,
+            });
+            res.status(200).json({ token: tokens.accessToken });
+            return;
         } catch (e) {
             errorHandler(res);
         }
@@ -61,31 +61,30 @@ export const AuthController = {
                 password
             );
             const user = await UserModel.findOne({ email });
-
-            if (!user) {
-                const newUser = await UserModel.create({
-                    password: encodedPassword,
-                    email,
-                });
-                const tokens = TokenService.createTokens({ _id: newUser.id });
-                if (!tokens) {
-                    errorHandler(res);
-                    return;
-                }
-                const refreshToken = await TokenModel.create({
-                    userId: newUser._id,
-                    token: tokens.refreshToken,
-                });
-
-                res.cookie('refreshToken', refreshToken.token, {
-                    maxAge: 30 * 24 * 60 * 60 * 1000,
-                    httpOnly: true,
-                });
-
-                res.status(200).json({ token: tokens.accessToken });
-            } else {
+            if (user) {
                 errorHandler(res, 400, 'This user already exists');
+                return;
             }
+
+            const newUser = await UserModel.create({
+                password: encodedPassword,
+                email,
+            });
+            const tokens = TokenService.createTokens({ userId: newUser.id });
+            if (!tokens) {
+                errorHandler(res);
+                return;
+            }
+            const refreshToken = await TokenModel.create({
+                userId: newUser.id,
+                token: tokens.refreshToken,
+            });
+
+            res.cookie('refreshToken', refreshToken.token, {
+                maxAge: 30 * 24 * 60 * 60 * 1000,
+                httpOnly: true,
+            });
+            res.status(200).json({ token: tokens.accessToken });
         } catch {
             errorHandler(res);
         }
@@ -102,26 +101,26 @@ export const AuthController = {
                 refreshToken
             ) as IJwtPayload | null;
 
-            if (!payload || !payload?._id) {
+            if (!payload || !payload?.userId) {
                 errorHandler(res, 401, 'Unauthorized');
                 return;
             }
             const refreshTokenDB = await TokenModel.findOne({
-                userId: payload._id,
+                userId: payload.userId,
             });
 
             if (!refreshTokenDB || refreshTokenDB.token !== refreshToken) {
                 errorHandler(res, 401, 'Unauthorized');
                 return;
             }
-            if (payload?._id) {
-                const accessToken = TokenService.createAccessToken({
-                    _id: payload._id,
-                });
-                res.status(200).json({ token: accessToken });
-            } else {
-                errorHandler(res, 401, 'Unauthorized');
+            const accessToken = TokenService.createAccessToken({
+                userId: payload.userId,
+            });
+            if (!accessToken) {
+                errorHandler(res);
+                return;
             }
+            res.status(200).json({ token: accessToken });
         } catch (e) {
             errorHandler(res, 401, 'Unauthorized');
         }

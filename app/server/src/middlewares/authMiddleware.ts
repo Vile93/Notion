@@ -24,7 +24,7 @@ export const authMiddleware = (
         }
 
         req.body.token = token;
-        req.body.userId = accessTokenPayload._id;
+        req.body.userId = accessTokenPayload.userId;
         next();
     } catch {
         errorHandler(res, 401, 'Unauthorized');

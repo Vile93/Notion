@@ -8,13 +8,13 @@ export const UserController = {
             const candidate = await UserModel.findOne({
                 _id: req.body.userId,
             });
-            if (candidate) {
-                res.status(200).json({
-                    email: candidate.email,
-                });
-            } else {
+            if (!candidate) {
                 errorHandler(res, 404, 'User not found');
+                return;
             }
+            res.status(200).json({
+                email: candidate.email,
+            });
         } catch (e) {
             errorHandler(res);
         }
