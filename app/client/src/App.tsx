@@ -1,4 +1,8 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+    createBrowserRouter,
+    Navigate,
+    RouterProvider,
+} from 'react-router-dom';
 import Loginpage from './pages/Loginpage';
 import AuthLayout from './layouts/AuthLayout/AuthLayout';
 import UserLayout from './layouts/UserLayout/UserLayout';
@@ -9,21 +13,30 @@ import Registerpage from './pages/Registerpage';
 const router = createBrowserRouter(
     [
         {
-            path: 'auth',
+            path: '/',
+
             element: <AuthLayout />,
             errorElement: <>Error</>,
             children: [
-                { path: 'register', element: <Registerpage /> },
-                { path: 'login', element: <Loginpage /> },
+                { path: 'auth/register', element: <Registerpage /> },
+                { path: 'auth/login', element: <Loginpage /> },
+                {
+                    index: true,
+                    element: <Navigate to={'auth/login'}></Navigate>,
+                },
             ],
         },
         {
-            path: 'user/',
+            path: '/',
             element: <UserLayout />,
             errorElement: <>Error2</>,
             children: [
-                { path: 'about', element: <Aboutpage /> },
-                { path: 'notes', element: <Notespage /> },
+                { path: 'user/about', element: <Aboutpage /> },
+                { path: 'user/notes', element: <Notespage /> },
+                {
+                    index: true,
+                    element: <Navigate to={'user/about'}></Navigate>,
+                },
             ],
         },
         {
