@@ -14,16 +14,15 @@ const Loginpage = () => {
             email: '',
         },
     });
+    console.log(control);
+
     const onSubmit = (data: ILoginForm) => {
         console.log(data);
     };
     return (
-        <div className="flex flex-col items-center mt-16">
-            <h1 className="text-2xl font-bold">Log in</h1>
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="flex flex-col w-56 gap-4 mt-4"
-            >
+        <div className="flex flex-col items-center">
+            <h1 className="title">Log in</h1>
+            <form onSubmit={handleSubmit(onSubmit)} className=" auth-form">
                 <Controller
                     name="email"
                     control={control}

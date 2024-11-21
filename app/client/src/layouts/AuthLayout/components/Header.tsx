@@ -2,8 +2,8 @@ import { NavLink } from 'react-router-dom';
 
 const Header = () => {
     return (
-        <header>
-            <nav className="flex gap-4 py-2 border-b-2 justify-end">
+        <header className="mb-16">
+            <nav className="header-nav">
                 <NavLink to={'/auth/register'}>Register</NavLink>
                 <NavLink to={'/auth/login'}>Login</NavLink>
             </nav>

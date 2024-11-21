@@ -22,17 +22,20 @@ const Registerpage = () => {
         console.log(data);
     };
     return (
-        <div className="flex flex-col items-center mt-16">
-            <h1 className="text-2xl font-bold">Sign up</h1>
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-                className="flex flex-col w-56 gap-4 mt-4"
-            >
+        <div className="flex flex-col items-center">
+            <h1 className="title">Sign up</h1>
+            <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
                 <Controller
                     name="username"
                     control={control}
-                    render={({ field }) => (
-                        <Input placeholder={PLACEHOLDRS.USERNAME} {...field} />
+                    render={({ field, fieldState }) => (
+                        <>
+                            <Input
+                                placeholder={PLACEHOLDRS.USERNAME}
+                                {...field}
+                            />
+                            {/*    {JSON.stringify(fieldState)} */}
+                        </>
                     )}
                 />
                 <Controller
