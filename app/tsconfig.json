@@ -1,15 +1,12 @@
 {
     "compilerOptions": {
+        "composite": true,
         "target": "es6",
         "module": "commonjs",
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-        "baseUrl": "./",
-        "paths": {
-            "@shared/*": ["shared/*"]
-        }
+        "forceConsistentCasingInFileNames": true
     },
     "include": ["client/**/*", "server/**/*", "shared/**/*"]
 }
