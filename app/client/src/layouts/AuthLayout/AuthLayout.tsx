@@ -1,10 +1,13 @@
 import { Outlet } from 'react-router-dom';
+import Header from './components/Header';
+import { Container } from '@mui/material';
 
 const AuthLayout = () => {
     return (
-        <div className="container mx-auto">
+        <Container>
+            <Header />
             <Outlet />
-        </div>
+        </Container>
     );
 };
 

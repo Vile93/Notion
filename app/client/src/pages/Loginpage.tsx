@@ -18,11 +18,11 @@ const Loginpage = () => {
         console.log(data);
     };
     return (
-        <div className="flex flex-col items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="flex flex-col items-center mt-16">
             <h1 className="text-2xl font-bold">Log in</h1>
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="flex flex-col w-32 gap-2 mt-4"
+                className="flex flex-col w-56 gap-4 mt-4"
             >
                 <Controller
                     name="email"
