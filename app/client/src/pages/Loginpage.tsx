@@ -1,6 +1,8 @@
-import { Button, Input } from '@mui/material';
-import { Controller, useForm } from 'react-hook-form';
-import { PLACEHOLDRS } from '../constants';
+import { Button } from '@mui/material';
+import { useForm } from 'react-hook-form';
+import { PLACEHOLDRS, UserLoginSchema } from '../constants';
+import CustomInput from '../components/CustomInput';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 interface ILoginForm {
     password: string;
@@ -13,6 +15,8 @@ const Loginpage = () => {
             password: '',
             email: '',
         },
+        mode: 'onSubmit',
+        resolver: zodResolver(UserLoginSchema),
     });
     console.log(control);
 
@@ -23,19 +27,18 @@ const Loginpage = () => {
         <div className="flex flex-col items-center">
             <h1 className="title">Log in</h1>
             <form onSubmit={handleSubmit(onSubmit)} className=" auth-form">
-                <Controller
-                    name="email"
+                <CustomInput
                     control={control}
-                    render={({ field }) => (
-                        <Input placeholder={PLACEHOLDRS.EMAIL} {...field} />
-                    )}
+                    placeholder={PLACEHOLDRS.EMAIL}
+                    name={'email'}
+                    className="w-full"
                 />
-                <Controller
-                    name="password"
+                <CustomInput
+                    type="password"
                     control={control}
-                    render={({ field }) => (
-                        <Input placeholder={PLACEHOLDRS.PASSWORD} {...field} />
-                    )}
+                    placeholder={PLACEHOLDRS.PASSWORD}
+                    name={'password'}
+                    className="w-full"
                 />
                 <Button type="submit">Log in</Button>
             </form>

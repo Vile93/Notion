@@ -1,7 +1,8 @@
-import { Button, Input } from '@mui/material';
-import { PLACEHOLDRS } from '../constants';
-import { Controller, useForm } from 'react-hook-form';
-
+import { Button } from '@mui/material';
+import { PLACEHOLDRS, UserRegisterSchema } from '../constants';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import CustomInput from '../components/CustomInput';
 interface IRegisterForm {
     username: string;
     email: string;
@@ -11,56 +12,48 @@ interface IRegisterForm {
 
 const Registerpage = () => {
     const { control, handleSubmit } = useForm({
+        resolver: zodResolver(UserRegisterSchema),
         defaultValues: {
             username: '',
             password: '',
             repeatPassword: '',
             email: '',
         },
+        mode: 'onChange',
     });
     const onSubmit = (data: IRegisterForm) => {
         console.log(data);
     };
+
     return (
         <div className="flex flex-col items-center">
             <h1 className="title">Sign up</h1>
             <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
-                <Controller
-                    name="username"
+                <CustomInput
                     control={control}
-                    render={({ field, fieldState }) => (
-                        <>
-                            <Input
-                                placeholder={PLACEHOLDRS.USERNAME}
-                                {...field}
-                            />
-                            {/*    {JSON.stringify(fieldState)} */}
-                        </>
-                    )}
+                    placeholder={PLACEHOLDRS.USERNAME}
+                    name={'username'}
+                    className="w-full"
                 />
-                <Controller
-                    name="email"
+                <CustomInput
                     control={control}
-                    render={({ field }) => (
-                        <Input placeholder={PLACEHOLDRS.EMAIL} {...field} />
-                    )}
+                    placeholder={PLACEHOLDRS.EMAIL}
+                    name={'email'}
+                    className="w-full"
                 />
-                <Controller
-                    name="password"
+                <CustomInput
+                    type="password"
                     control={control}
-                    render={({ field }) => (
-                        <Input placeholder={PLACEHOLDRS.PASSWORD} {...field} />
-                    )}
+                    placeholder={PLACEHOLDRS.PASSWORD}
+                    name={'password'}
+                    className="w-full"
                 />
-                <Controller
-                    name="repeatPassword"
+                <CustomInput
+                    type="password"
                     control={control}
-                    render={({ field }) => (
-                        <Input
-                            placeholder={PLACEHOLDRS.REPEAT_PASSWORD}
-                            {...field}
-                        />
-                    )}
+                    placeholder={PLACEHOLDRS.REPEAT_PASSWORD}
+                    name={'repeatPassword'}
+                    className="w-full"
                 />
                 <Button type="submit">Sign up</Button>
             </form>
