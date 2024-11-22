@@ -13,8 +13,11 @@
     .auth-form {
         @apply flex flex-col w-56 gap-2 mt-4;
     }
+    .header {
+        @apply py-2 border-b-2;
+    }
     .header-nav {
-        @apply flex gap-8 py-2 border-b-2 justify-end;
+        @apply flex gap-8 justify-end;
     }
     .link {
         @apply text-blue-400 hover:text-blue-800 transition-colors duration-300;
