@@ -3,14 +3,29 @@ import { PLACEHOLDRS, UserRegisterSchema } from '../constants';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import CustomInput from '../components/CustomInput';
-interface IRegisterForm {
-    username: string;
-    email: string;
-    password: string;
-    repeatPassword: string;
-}
+import { IUserRegister } from '../interfaces/IUserRegister';
+import { useQuery } from '@tanstack/react-query';
+import { registerUser } from '../services/auth.service';
+import { useState } from 'react';
 
 const Registerpage = () => {
+    const [enabled, setEnabled] = useState(false);
+    const [candidate, setCandidate] = useState<IUserRegister>({
+        username: '',
+        password: '',
+        repeatPassword: '',
+        email: '',
+    });
+    const { data } = useQuery({
+        queryKey: ['register'],
+        queryFn: () => {
+            setEnabled(false);
+            registerUser(candidate);
+        },
+        enabled,
+    });
+    console.log(data);
+
     const { control, handleSubmit } = useForm({
         resolver: zodResolver(UserRegisterSchema),
         defaultValues: {
@@ -21,8 +36,9 @@ const Registerpage = () => {
         },
         mode: 'onChange',
     });
-    const onSubmit = (data: IRegisterForm) => {
-        console.log(data);
+    const onSubmit = (data: IUserRegister) => {
+        setEnabled(true);
+        setCandidate(data);
     };
 
     return (

@@ -18,6 +18,11 @@ const start = async () => {
         console.log(e);
     }
 };
+const corsOptions = {
+    origin: 'http://localhost:5173',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+};
 
-app.use(cookieParser(), json(), cors(), moragan('tiny'), router);
+app.use(cookieParser(), json(), cors(corsOptions), moragan('tiny'), router);
 start();

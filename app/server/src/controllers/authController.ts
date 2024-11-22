@@ -57,9 +57,12 @@ export const AuthController = {
     register: async (req: Request, res: Response) => {
         try {
             const { password, email } = req.body;
+            console.log(password, email);
+
             const encodedPassword = await BcryptService.createEncryptedValue(
                 password
             );
+
             const user = await UserModel.findOne({ email });
             if (user) {
                 errorHandler(res, 400, 'This user already exists');
@@ -85,7 +88,9 @@ export const AuthController = {
                 httpOnly: true,
             });
             res.status(200).json({ token: tokens.accessToken });
-        } catch {
+        } catch (e) {
+            console.log(e);
+
             errorHandler(res);
         }
     },

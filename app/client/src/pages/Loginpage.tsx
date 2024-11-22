@@ -3,13 +3,29 @@ import { useForm } from 'react-hook-form';
 import { PLACEHOLDRS, UserLoginSchema } from '../constants';
 import CustomInput from '../components/CustomInput';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-interface ILoginForm {
-    password: string;
-    email: string;
-}
+import { IUserLogin } from '../interfaces/IUserLogin';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { loginUser } from '../services/auth.service';
+import { saveJWT } from '../utils/saveJWT';
+import { useNavigate } from 'react-router-dom';
 
 const Loginpage = () => {
+    const navigate = useNavigate();
+    const [enabled, setEnabled] = useState(false);
+    const [candidate, setCandidate] = useState<IUserLogin>({
+        password: '',
+        email: '',
+    });
+    const { data, isSuccess } = useQuery({
+        queryKey: ['register'],
+        queryFn: () => {
+            setEnabled(false);
+            return loginUser(candidate);
+        },
+        enabled,
+    });
+
     const { control, handleSubmit } = useForm({
         defaultValues: {
             password: '',
@@ -18,11 +34,18 @@ const Loginpage = () => {
         mode: 'onSubmit',
         resolver: zodResolver(UserLoginSchema),
     });
-    console.log(control);
 
-    const onSubmit = (data: ILoginForm) => {
-        console.log(data);
+    const onSubmit = (data: IUserLogin) => {
+        setEnabled(true);
+        setCandidate(data);
     };
+
+    if (isSuccess) {
+        const { token } = data;
+        if (!token) return;
+        saveJWT(data.token);
+        navigate('/');
+    }
     return (
         <div className="flex flex-col items-center">
             <h1 className="title">Log in</h1>
