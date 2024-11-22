@@ -11,7 +11,7 @@
         @apply text-2xl font-bold;
     }
     .auth-form {
-        @apply flex flex-col w-56 gap-4 mt-4;
+        @apply flex flex-col w-56 gap-2 mt-4;
     }
     .header-nav {
         @apply flex gap-8 py-2 border-b-2 justify-end;
