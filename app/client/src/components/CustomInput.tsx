@@ -36,7 +36,7 @@ const CustomInput: FC<ICustomInputProps> = ({
                     />
                     {(fieldState?.error?.message && fieldState?.isTouched) ||
                     fieldState.invalid ? (
-                        <div className="text-red-600 text-sm">
+                        <div className="error">
                             {fieldState?.error?.message}
                         </div>
                     ) : null}

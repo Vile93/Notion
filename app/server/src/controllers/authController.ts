@@ -56,7 +56,7 @@ export const AuthController = {
     },
     register: async (req: Request, res: Response) => {
         try {
-            const { password, email } = req.body;
+            const { password, email, username } = req.body;
             console.log(password, email);
 
             const encodedPassword = await BcryptService.createEncryptedValue(
@@ -72,6 +72,7 @@ export const AuthController = {
             const newUser = await UserModel.create({
                 password: encodedPassword,
                 email,
+                username,
             });
             const tokens = TokenService.createTokens({ userId: newUser.id });
             if (!tokens) {
@@ -128,6 +129,14 @@ export const AuthController = {
             res.status(200).json({ token: accessToken });
         } catch (e) {
             errorHandler(res, 401, 'Unauthorized');
+        }
+    },
+    logout: (req: Request, res: Response) => {
+        try {
+            res.clearCookie('refreshToken');
+            res.status(200).json({ message: 'Logout complete' });
+        } catch (e) {
+            errorHandler(res);
         }
     },
 };

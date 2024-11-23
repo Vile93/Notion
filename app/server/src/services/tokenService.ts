@@ -16,10 +16,10 @@ export const TokenService = {
     createTokens: (payload: IJwtPayload) => {
         try {
             const accessToken = jwt.sign(payload, ACCESS_SECRET, {
-                expiresIn: '1min',
+                expiresIn: '1h',
             });
             const refreshToken = jwt.sign(payload, REFRESH_SECRET, {
-                expiresIn: '2min',
+                expiresIn: '30d',
             });
             return {
                 accessToken,

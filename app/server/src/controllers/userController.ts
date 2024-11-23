@@ -14,6 +14,8 @@ export const UserController = {
             }
             res.status(200).json({
                 email: candidate.email,
+                username: candidate.username,
+                createdAt: candidate.createdAt,
             });
         } catch (e) {
             errorHandler(res);

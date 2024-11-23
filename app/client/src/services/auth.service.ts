@@ -1,30 +1,36 @@
 import { IUserLogin } from '../interfaces/IUserLogin';
 import { IUserRegister } from '../interfaces/IUserRegister';
+import { fetchOptions } from '../utils/fetchOptions';
 
 export const getJWT = () => {
     return fetch(import.meta.env.VITE_API + '/auth/jwt', {
         method: 'POST',
-        credentials: 'include',
+        ...(fetchOptions() as RequestInit),
     }).then((res) => res.json());
 };
 
 export const registerUser = (user: IUserRegister) => {
     return fetch(import.meta.env.VITE_API + '/auth/register', {
-        headers: { 'Content-Type': 'application/json' },
         method: 'POST',
         body: JSON.stringify({
             email: user.email,
             password: user.password,
+            username: user.username,
         }),
-        credentials: 'include',
+        ...(fetchOptions() as RequestInit),
     }).then((res) => res.json());
 };
 
 export const loginUser = (user: IUserLogin) => {
     return fetch(import.meta.env.VITE_API + '/auth/login', {
-        headers: { 'Content-Type': 'application/json' },
         method: 'POST',
         body: JSON.stringify(user),
-        credentials: 'include',
+        ...(fetchOptions() as RequestInit),
+    }).then((res) => res.json());
+};
+
+export const logoutUser = () => {
+    return fetch(import.meta.env.VITE_API + '/auth/logout', {
+        method: 'POST',
     }).then((res) => res.json());
 };

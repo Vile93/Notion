@@ -16,7 +16,11 @@ export const NoteController = {
     createNote: async (req: Request, res: Response) => {
         try {
             const { title, text, userId } = req.body;
-            const newNote = await NoteModel.create({ title, text, userId });
+            const newNote = await NoteModel.create({
+                title,
+                text,
+                userId,
+            });
             res.status(201).json(newNote);
         } catch {
             errorHandler(res);

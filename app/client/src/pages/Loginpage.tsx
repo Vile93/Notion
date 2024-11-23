@@ -5,20 +5,19 @@ import CustomInput from '../components/CustomInput';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { IUserLogin } from '../interfaces/IUserLogin';
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { loginUser } from '../services/auth.service';
 import { saveJWT } from '../utils/saveJWT';
-import { useNavigate } from 'react-router-dom';
 
 const Loginpage = () => {
-    const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const [enabled, setEnabled] = useState(false);
     const [candidate, setCandidate] = useState<IUserLogin>({
         password: '',
         email: '',
     });
     const { data, isSuccess } = useQuery({
-        queryKey: ['register'],
+        queryKey: ['login'],
         queryFn: () => {
             setEnabled(false);
             return loginUser(candidate);
@@ -42,9 +41,12 @@ const Loginpage = () => {
 
     if (isSuccess) {
         const { token } = data;
-        if (!token) return;
-        saveJWT(data.token);
-        navigate('/');
+        if (token) {
+            saveJWT(data.token);
+            queryClient.setQueryData(['jwt'], () => ({
+                token: localStorage.getItem('jwt'),
+            }));
+        }
     }
     return (
         <div className="flex flex-col items-center">
@@ -64,6 +66,9 @@ const Loginpage = () => {
                     className="w-full"
                 />
                 <Button type="submit">Log in</Button>
+                {data?.message ? (
+                    <div className="error">{data.message}</div>
+                ) : null}
             </form>
         </div>
     );

@@ -1,3 +1,3 @@
 export const saveJWT = (jwt: string) => {
-    localStorage.setItem('Bearer jwt', jwt);
+    localStorage.setItem('jwt', `Bearer ${jwt}`);
 };

@@ -1,9 +1,12 @@
-import { NextFunction, Request, Response, text } from "express";
-import { z } from "zod";
+import { NextFunction, Request, Response } from 'express';
+import { z } from 'zod';
 
 const Note = z.object({
-    title: z.string().min(1),
-    text: z.string().min(1),
+    title: z
+        .string()
+        .trim()
+        .min(1, { message: 'The task title must not be empty.' }),
+    text: z.string(),
 });
 
 export const noteValidator = (

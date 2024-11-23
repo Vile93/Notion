@@ -7,6 +7,8 @@ export const PLACEHOLDRS = {
     EMAIL: 'Email',
     PASSWORD: 'Passowrd',
     REPEAT_PASSWORD: 'Repeat password',
+    NOTE_TITLE: 'Note title',
+    NOTE_TEXT: 'Note text',
 };
 
 export const UserRegisterSchema = UserSchema.extend({
