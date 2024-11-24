@@ -1,31 +1,22 @@
 import { INote } from '../interfaces/INote';
-import { fetchOptions } from '../utils/fetchOptions';
+import { axiosInstance } from './main.service';
 
 export const fetchNotes = () => {
-    return fetch(import.meta.env.VITE_API + '/notes', {
-        ...(fetchOptions() as RequestInit),
-    }).then((res) => res.json());
+    return axiosInstance.get('/notes');
 };
 
 export const createNote = (note: INote) => {
-    return fetch(import.meta.env.VITE_API + '/notes', {
-        method: 'POST',
-        body: JSON.stringify(note),
-        ...(fetchOptions() as RequestInit),
-    }).then((res) => res.json());
+    return axiosInstance.post('/notes', {
+        ...note,
+    });
 };
 
 export const deleteNote = (id: string) => {
-    return fetch(import.meta.env.VITE_API + `/notes/${id}`, {
-        method: 'DELETE',
-        ...(fetchOptions() as RequestInit),
-    }).then((res) => res.json());
+    return axiosInstance.delete(import.meta.env.VITE_API + `/notes/${id}`);
 };
 
 export const editNote = (id: string, newNoteData: INote) => {
-    return fetch(import.meta.env.VITE_API + `/notes/${id}`, {
-        body: JSON.stringify(newNoteData),
-        method: 'PUT',
-        ...(fetchOptions() as RequestInit),
-    }).then((res) => res.json());
+    return axiosInstance.put(`/notes/${id}`, {
+        ...newNoteData,
+    });
 };

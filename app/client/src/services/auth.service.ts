@@ -1,37 +1,25 @@
 import { IUserLogin } from '../interfaces/IUserLogin';
 import { IUserRegister } from '../interfaces/IUserRegister';
-import { fetchOptions } from '../utils/fetchOptions';
+import { axiosInstance } from './main.service';
 
 export const createJWT = () => {
-    return fetch(import.meta.env.VITE_API + '/auth/jwt', {
-        method: 'POST',
-        ...(fetchOptions() as RequestInit),
-    }).then((res) => res.json());
+    return axiosInstance.post('/auth/jwt');
 };
 
 export const registerUser = (user: IUserRegister) => {
-    return fetch(import.meta.env.VITE_API + '/auth/register', {
-        method: 'POST',
-        body: JSON.stringify({
-            email: user.email,
-            password: user.password,
-            username: user.username,
-        }),
-        ...(fetchOptions() as RequestInit),
-    }).then((res) => res.json());
+    return axiosInstance.post('/auth/register', {
+        email: user.email,
+        password: user.password,
+        username: user.username,
+    });
 };
 
 export const loginUser = (user: IUserLogin) => {
-    return fetch(import.meta.env.VITE_API + '/auth/login', {
-        method: 'POST',
-        body: JSON.stringify(user),
-        ...(fetchOptions() as RequestInit),
-    }).then((res) => res.json());
+    return axiosInstance.post('/auth/login', {
+        ...user,
+    });
 };
 
 export const logoutUser = () => {
-    return fetch(import.meta.env.VITE_API + '/auth/logout', {
-        method: 'POST',
-        ...(fetchOptions() as RequestInit),
-    }).then((res) => res.json());
+    return axiosInstance.post('/auth/logout');
 };

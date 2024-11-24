@@ -1,7 +1,5 @@
-import { fetchOptions } from '../utils/fetchOptions';
+import { axiosInstance } from './main.service';
 
 export const fetchUser = () => {
-    return fetch(import.meta.env.VITE_API + '/users', {
-        ...(fetchOptions() as RequestInit),
-    }).then((res) => res.json());
+    return axiosInstance.get('/users');
 };
