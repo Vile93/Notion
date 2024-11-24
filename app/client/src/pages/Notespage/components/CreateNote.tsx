@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { INote } from '../../../interfaces/INote';
 import { createNote } from '../../../services/note.service';
 import useFetch from '../../../hooks/useFetch';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { UserContext } from '../../../contexts/UserContext';
 
 const CreateNote = () => {
@@ -21,12 +21,28 @@ const CreateNote = () => {
         resolver: zodResolver(NoteSchema),
     });
     const onSubmit = (newNote: INote) => {
+        console.log(newNote);
+
         newNoteFetch.fetchData(createNote, newNote);
     };
+    useEffect(() => {
+        if (newNoteFetch.data?._id) {
+            const { createdAt, title, text, _id } = newNoteFetch.data;
+            user?.setNotes((prev) => [
+                ...prev,
+                {
+                    _id,
+                    createdAt,
+                    title,
+                    text,
+                },
+            ]);
+        }
+    }, [newNoteFetch.data]);
     return (
         <div className="mt-8 text-center">
             <form
-                className="flex gap-4 text-left items-start"
+                className="flex gap-4 text-left items-start flex-wrap"
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <CustomInput

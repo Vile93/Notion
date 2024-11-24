@@ -17,13 +17,15 @@ const Aboutpage = () => {
     useEffect(() => {
         userData.fetchData(fetchUser);
     }, []);
+    useEffect(() => {
+        if (user?.setUser && userData.isCompleted) {
+            user.setUser(userData.data);
+            if (userData.data?.username)
+                localStorage.setItem('username', userData.data?.username);
+        }
+    }, [userData.isCompleted]);
     if (userData.isLoading) {
         return <Loader />;
-    }
-    if (user?.setUser && userData.isCompleted) {
-        user.setUser(userData.data);
-        if (userData.data?.username)
-            localStorage.setItem('username', userData.data?.username);
     }
 
     return (
