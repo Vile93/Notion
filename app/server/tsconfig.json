@@ -1,12 +1,12 @@
 {
     "extends": "../tsconfig.json",
-    "include": ["src"],
+    "include": ["src", "../shared/src/**/*"],
     "exclude": ["dist", "node_modules"],
     "compilerOptions": {
         "target": "es6",
         "module": "CommonJS",
+        "rootDir": "..",
         "outDir": "./dist",
-        "rootDir": "./src",
         "strict": true,
         "esModuleInterop": true
     }
