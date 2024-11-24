@@ -3,7 +3,7 @@ import { createJWT } from '../services/auth.service';
 import { saveJWT } from '../utils/saveJWT';
 import axios from 'axios';
 
-const useFetch = <T extends any[]>(
+const useFetch = (
     isVerification: boolean,
     setAuth?: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
@@ -36,7 +36,10 @@ const useFetch = <T extends any[]>(
             errorHandler(err as Error);
         }
     };
-    const fetchData = async (cb: (...args: T) => any, ...args: T) => {
+    const fetchData = async <T extends any[]>(
+        cb: (...args: T) => any,
+        ...args: T
+    ) => {
         setIsLoading(true);
         setIsCompleted(false);
         setError({

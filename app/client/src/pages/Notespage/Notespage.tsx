@@ -13,7 +13,6 @@ const Notespage = () => {
     useEffect(() => {
         notes.fetchData(fetchNotes);
     }, []);
-    console.log(notes);
 
     if (notes.isLoading) {
         return (
@@ -25,16 +24,22 @@ const Notespage = () => {
     return (
         <div>
             <h1 className="title text-center">Notes</h1>
-            <CreateNote />
+            <CreateNote mutateNotes={notes.mutateData} />
 
             <div className="flex flex-col gap-2 mt-2">
-                {notes?.data?.map((note: INoteResolve) => (
-                    <Note
-                        key={note._id}
-                        {...note}
-                        mutateNotes={notes.mutateData}
-                    />
-                ))}
+                {notes?.data
+                    ?.toSorted(
+                        (a: INoteResolve, b: INoteResolve) =>
+                            new Date(b.createdAt).getTime() -
+                            new Date(a.createdAt).getTime()
+                    )
+                    ?.map((note: INoteResolve) => (
+                        <Note
+                            key={note._id}
+                            {...note}
+                            mutateNotes={notes.mutateData}
+                        />
+                    ))}
             </div>
         </div>
     );

@@ -24,15 +24,13 @@ const Note: FC<INoteProps> = ({ _id, createdAt, title, text, mutateNotes }) => {
 
     useEffect(() => {
         if (!deleteNoteFetch.error.status && deleteNoteFetch.isCompleted)
-            user?.setNotes((prev) =>
+            mutateNotes((prev) =>
                 prev.filter((note: INoteResolve) => note._id !== _id)
             );
     }, [
-        _id,
         deleteNoteFetch.data,
         deleteNoteFetch.error.status,
         deleteNoteFetch.isCompleted,
-        user,
     ]);
 
     if (deleteNoteFetch.isLoading)
