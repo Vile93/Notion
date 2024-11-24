@@ -5,23 +5,14 @@ import { Button } from '@mui/material';
 import { NoteSchema } from '../../../../../shared/src/Schemes/NoteSchema';
 import { useForm } from 'react-hook-form';
 import { INote } from '../../../interfaces/INote';
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
 import { createNote } from '../../../services/note.service';
-import { createJWT } from '../../../services/auth.service';
+import useFetch from '../../../hooks/useFetch';
+import { useContext } from 'react';
+import { UserContext } from '../../../contexts/UserContext';
 
 const CreateNote = () => {
-    const [isCreateEnabled, setIsCreateEnabled] = useState(false);
-    const [isJWTEnabled, setIsJWTEnabled] = useState(false);
-    const [note, setNote] = useState<INote>({
-        title: '',
-        text: '',
-    });
-    const { data: JWT } = useQuery({
-        queryKey: ['jwt'],
-        queryFn: createJWT,
-        enabled: isJWTEnabled,
-    });
+    const user = useContext(UserContext);
+    const newNoteFetch = useFetch(true, !!user?.isAuth);
     const { control, handleSubmit } = useForm({
         defaultValues: {
             title: '',
@@ -29,20 +20,8 @@ const CreateNote = () => {
         },
         resolver: zodResolver(NoteSchema),
     });
-
-    const { isLoading: isCreateNoteLoading } = useQuery({
-        queryKey: ['createdNote', createJWT],
-        queryFn: () => {
-            setIsCreateEnabled(false);
-            setIsJWTEnabled(false);
-            return createNote(note);
-        },
-        enabled: isCreateEnabled && !!JWT,
-    });
     const onSubmit = (newNote: INote) => {
-        setIsCreateEnabled(true);
-        setIsJWTEnabled(true);
-        setNote(newNote);
+        newNoteFetch.fetchData(createNote, newNote);
     };
     return (
         <div className="mt-8 text-center">

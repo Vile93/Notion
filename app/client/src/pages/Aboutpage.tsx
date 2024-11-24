@@ -9,7 +9,6 @@ import { UserContext } from '../contexts/UserContext';
 const Aboutpage = () => {
     const user = useContext(UserContext);
     const userData = useFetch(true, !!user?.isAuth);
-    console.log(userData);
     useEffect(() => {
         if (user?.setIsAuth && !userData.isAuth) {
             user.setIsAuth(false);
@@ -20,6 +19,11 @@ const Aboutpage = () => {
     }, []);
     if (userData.isLoading) {
         return <Loader />;
+    }
+    if (user?.setUser && userData.isCompleted) {
+        user.setUser(userData.data);
+        if (userData.data?.username)
+            localStorage.setItem('username', userData.data?.username);
     }
 
     return (

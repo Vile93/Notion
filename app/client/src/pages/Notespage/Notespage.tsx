@@ -1,29 +1,37 @@
 import { CircularProgress, Grid } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
-import { fetchNotes } from '../../services/note.service';
 import { INoteResolve } from '../../interfaces/INoteResolve';
 import { formatDate } from '../../utils/formatDate';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { createJWT } from '../../services/auth.service';
 import CreateNote from './components/CreateNote';
+import useFetch from '../../hooks/useFetch';
+import { UserContext } from '../../contexts/UserContext';
+import { useContext, useEffect } from 'react';
+import { fetchNotes } from '../../services/note.service';
 
 const Notespage = () => {
-    const { data: notes, isLoading: isfetchNotesLoading } = useQuery({
-        queryKey: ['notes', createJWT],
-        queryFn: fetchNotes,
-    });
-
+    const user = useContext(UserContext);
+    const notes = useFetch(true, !!user?.isAuth);
+    useEffect(() => {
+        if (user?.setIsAuth && !notes.isAuth) user.setIsAuth(false);
+    }, [notes.isAuth, user]);
+    useEffect(() => {
+        notes.fetchData(fetchNotes);
+    }, []);
     return (
         <div>
             <h1 className="title text-center">Notes</h1>
             <CreateNote />
-            {isfetchNotesLoading ? (
-                <CircularProgress />
+            {notes.isLoading ? (
+                <div
+                    className="text-center mt-8
+                "
+                >
+                    <CircularProgress />
+                </div>
             ) : (
                 <div className="flex flex-col gap-2 mt-2">
-                    {!notes?.message &&
-                        notes &&
-                        notes?.map((note: INoteResolve) => (
+                    {!notes.data?.message &&
+                        notes.data?.map((note: INoteResolve) => (
                             <div
                                 key={note._id}
                                 className="bg-gray-200 rounded p-2 flex items-center justify-between"

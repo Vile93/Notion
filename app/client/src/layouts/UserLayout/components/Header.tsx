@@ -8,7 +8,10 @@ const Header = () => {
     return (
         <header className="mb-16 flex justify-between items-center header">
             <div>
-                Hello, <span className="font-bold">{user?.user?.username}</span>
+                Hello,{' '}
+                <span className="font-bold">
+                    {user?.user?.username ?? localStorage.getItem('username')}
+                </span>
             </div>
             <nav className="header-nav">
                 <NavLink to={'/user/about'}>About</NavLink>
