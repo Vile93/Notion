@@ -9,30 +9,49 @@ import UserLayout from './layouts/UserLayout/UserLayout';
 import Aboutpage from './pages/Aboutpage';
 import Notespage from './pages/Notespage/Notespage';
 import Registerpage from './pages/Registerpage';
-import { useQuery } from '@tanstack/react-query';
-import { getJWT } from './services/auth.service';
-import { CircularProgress } from '@mui/material';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { createJWT } from './services/auth.service';
 import NotFoundpage from './pages/NotFoundpage';
 import AuthErrorLayout from './layouts/AuthLayout/AuthErrorLayout';
 import UserErrorLayout from './layouts/UserLayout/UserErrorLayout';
+import { saveJWT } from './utils/saveJWT';
+import { clearJWT } from './utils/clearJWT';
+import { createContext, useState } from 'react';
+import Loader from './components/Loader';
+
+interface IUserContext {
+    isAuth: boolean;
+    setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const UserContext = createContext<IUserContext | null>(null);
 
 function App() {
-    const { data, isLoading } = useQuery({
-        queryKey: ['jwt'],
-        queryFn: getJWT,
-        refetchOnWindowFocus: false,
-        staleTime: 0,
-    });
-    console.log(data, 'jwt');
+    const [isAuth, setIsAuth] = useState(!!localStorage.getItem('jwt'));
+    /*     const queryClient = useQueryClient();
 
-    if (isLoading)
-        return (
-            <CircularProgress className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-        );
+    const {
+        data: jwt,
+        isLoading,
+        isSuccess,
+    } = useQuery({
+        queryKey: ['jwt'],
+        queryFn: createJWT,
+    });
+
+    if (isLoading) return <Loader />;
+
+    if (isSuccess) {
+        if (jwt?.token) {
+            saveJWT(jwt);
+        } else {
+            clearJWT();
+        }
+    } */
 
     const router = createBrowserRouter(
         [
-            !data?.token
+            !isAuth
                 ? {
                       path: '/',
                       element: <AuthLayout />,
@@ -88,7 +107,12 @@ function App() {
     );
 
     return (
-        <RouterProvider router={router} future={{ v7_startTransition: true }} />
+        <UserContext.Provider value={{ isAuth, setIsAuth }}>
+            <RouterProvider
+                router={router}
+                future={{ v7_startTransition: true }}
+            />
+        </UserContext.Provider>
     );
 }
 
