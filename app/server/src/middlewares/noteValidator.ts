@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
+import { errorHandler } from '../utils/errorHandler';
 
 const Note = z.object({
     title: z
@@ -19,6 +20,6 @@ export const noteValidator = (
         Note.parse({ title, text });
         next();
     } catch (e) {
-        res.status(400).json(e);
+        errorHandler(res);
     }
 };
