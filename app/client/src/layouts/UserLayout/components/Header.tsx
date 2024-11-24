@@ -10,7 +10,9 @@ const Header = () => {
             <div>
                 Hello,{' '}
                 <span className="font-bold">
-                    {user?.user?.username ?? localStorage.getItem('username')}
+                    {user?.user?.username ??
+                        JSON.parse(localStorage.getItem('user') ?? '{}')
+                            ?.username}
                 </span>
             </div>
             <nav className="header-nav">

@@ -25,6 +25,9 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
             localStorage.clear();
         }
     }, [isAuth]);
+    useEffect(() => {
+        if (user) localStorage.setItem('user', JSON.stringify(user));
+    }, [user]);
     return (
         <UserContext.Provider
             value={{ isAuth, setIsAuth, user, setUser, notes, setNotes }}

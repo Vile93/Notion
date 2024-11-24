@@ -5,14 +5,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import CustomInput from '../components/CustomInput';
 import { IUserRegister } from '../interfaces/IUserRegister';
 import { registerUser } from '../services/auth.service';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import useFetch from '../hooks/useFetch';
 import { UserContext } from '../contexts/UserContext';
 
 const Registerpage = () => {
     const user = useContext(UserContext);
-    const authFetch = useFetch(false, !!user?.isAuth);
-
+    const authFetch = useFetch(false, user?.setIsAuth);
     const { control, handleSubmit } = useForm({
         resolver: zodResolver(UserRegisterSchema),
         defaultValues: {
@@ -26,13 +25,6 @@ const Registerpage = () => {
     const onSubmit = async (data: IUserRegister) => {
         authFetch.fetchData(registerUser, { ...data });
     };
-
-    useEffect(() => {
-        if (user?.setIsAuth && authFetch.isAuth) {
-            user.setIsAuth(true);
-        }
-    }, [user, authFetch.isAuth]);
-
     return (
         <div className="flex flex-col items-center">
             <h1 className="title">Sign up</h1>
@@ -64,8 +56,8 @@ const Registerpage = () => {
                     className="w-full"
                 />
                 <Button type="submit">Sign up</Button>
-                {authFetch.data?.message ? (
-                    <div className="error">{authFetch.data?.message}</div>
+                {authFetch?.error?.message ? (
+                    <div className="error">{authFetch?.error?.message}</div>
                 ) : null}
             </form>
         </div>

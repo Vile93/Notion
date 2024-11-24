@@ -12,19 +12,35 @@ import EditIcon from '@mui/icons-material/Edit';
 import useModal from '../../../hooks/useModal';
 import NoteEdit from './NoteEdit';
 
-const Note: FC<INoteResolve> = ({ _id, createdAt, title, text }) => {
+interface INoteProps extends INoteResolve {
+    mutateNotes: React.Dispatch<React.SetStateAction<INoteResolve[]>>;
+}
+
+const Note: FC<INoteProps> = ({ _id, createdAt, title, text, mutateNotes }) => {
     const user = useContext(UserContext);
-    const deleteNoteFetch = useFetch(true, !!user?.isAuth);
+    const deleteNoteFetch = useFetch(true, user?.setIsAuth);
     const showNoteInfo = useModal();
     const editNoteInfo = useModal();
+
     useEffect(() => {
-        if (deleteNoteFetch.isCompleted)
+        if (!deleteNoteFetch.error.status && deleteNoteFetch.isCompleted)
             user?.setNotes((prev) =>
                 prev.filter((note: INoteResolve) => note._id !== _id)
             );
-    }, [deleteNoteFetch.data]);
+    }, [
+        _id,
+        deleteNoteFetch.data,
+        deleteNoteFetch.error.status,
+        deleteNoteFetch.isCompleted,
+        user,
+    ]);
 
-    if (deleteNoteFetch.isLoading) return <CircularProgress />;
+    if (deleteNoteFetch.isLoading)
+        return (
+            <div className="text-center">
+                <CircularProgress />
+            </div>
+        );
     return (
         <div className="bg-gray-200 rounded p-2 flex items-center justify-between">
             <div className="flex gap-4 items-center">
@@ -68,6 +84,7 @@ const Note: FC<INoteResolve> = ({ _id, createdAt, title, text }) => {
                 createdAt={createdAt}
             />
             <NoteEdit
+                mutateNotes={mutateNotes}
                 handleClose={editNoteInfo.closeModal}
                 open={editNoteInfo.isOpen}
                 text={text}

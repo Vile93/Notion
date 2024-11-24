@@ -8,26 +8,18 @@ import { UserContext } from '../contexts/UserContext';
 
 const Aboutpage = () => {
     const user = useContext(UserContext);
-    const userData = useFetch(true, !!user?.isAuth);
-    useEffect(() => {
-        if (user?.setIsAuth && !userData.isAuth) {
-            user.setIsAuth(false);
-        }
-    }, [user, userData.isAuth]);
+    const userData = useFetch(true, user?.setIsAuth);
     useEffect(() => {
         userData.fetchData(fetchUser);
     }, []);
     useEffect(() => {
-        if (user?.setUser && userData.isCompleted) {
-            user.setUser(userData.data);
-            if (userData.data?.username)
-                localStorage.setItem('username', userData.data?.username);
+        if (!userData.isLoading) {
+            user?.setUser(userData.data);
         }
-    }, [userData.isCompleted]);
+    }, [userData.isLoading]);
     if (userData.isLoading) {
         return <Loader />;
     }
-
     return (
         <div>
             <h1 className="title text-center">About me</h1>

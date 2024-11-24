@@ -12,7 +12,7 @@ import { UserContext } from '../../../contexts/UserContext';
 
 const CreateNote = () => {
     const user = useContext(UserContext);
-    const newNoteFetch = useFetch(true, !!user?.isAuth);
+    const newNoteFetch = useFetch(true, user?.setIsAuth);
     const { control, handleSubmit } = useForm({
         defaultValues: {
             title: '',
@@ -21,8 +21,6 @@ const CreateNote = () => {
         resolver: zodResolver(NoteSchema),
     });
     const onSubmit = (newNote: INote) => {
-        console.log(newNote);
-
         newNoteFetch.fetchData(createNote, newNote);
     };
     useEffect(() => {
