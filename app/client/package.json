@@ -15,7 +15,6 @@
         "@hookform/resolvers": "^3.9.1",
         "@mui/icons-material": "^6.1.8",
         "@mui/material": "^6.1.8",
-        "@tanstack/react-query": "^5.61.0",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-hook-form": "^7.53.2",
@@ -23,7 +22,6 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.13.0",
-        "@tailwindcss/typography": "^0.5.15",
         "@types/react": "^18.3.12",
         "@types/react-dom": "^18.3.1",
         "@vitejs/plugin-react": "^4.3.3",
