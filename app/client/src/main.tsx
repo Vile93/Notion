@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import UserProvider from './contexts/UserContext';
 
 const client = new QueryClient({
     defaultOptions: {
@@ -15,7 +16,9 @@ const client = new QueryClient({
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <QueryClientProvider client={client}>
-            <App />
+            <UserProvider>
+                <App />
+            </UserProvider>
         </QueryClientProvider>
     </StrictMode>
 );
