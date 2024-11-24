@@ -6,12 +6,12 @@ import CustomInput from '../components/CustomInput';
 import { IUserRegister } from '../interfaces/IUserRegister';
 import { registerUser } from '../services/auth.service';
 import { useContext, useEffect } from 'react';
-import { UserContext } from '../App';
 import useFetch from '../hooks/useFetch';
+import { UserContext } from '../contexts/UserContext';
 
 const Registerpage = () => {
-    const auth = useContext(UserContext);
-    const authFetch = useFetch(false, !!auth?.isAuth);
+    const user = useContext(UserContext);
+    const authFetch = useFetch(false, !!user?.isAuth);
 
     const { control, handleSubmit } = useForm({
         resolver: zodResolver(UserRegisterSchema),
@@ -28,10 +28,10 @@ const Registerpage = () => {
     };
 
     useEffect(() => {
-        if (auth?.setIsAuth && authFetch.isAuth) {
-            auth.setIsAuth(true);
+        if (user?.setIsAuth && authFetch.isAuth) {
+            user.setIsAuth(true);
         }
-    }, [auth, authFetch.isAuth]);
+    }, [user, authFetch.isAuth]);
 
     return (
         <div className="flex flex-col items-center">

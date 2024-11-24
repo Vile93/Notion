@@ -32,5 +32,6 @@ export const loginUser = (user: IUserLogin) => {
 export const logoutUser = () => {
     return fetch(import.meta.env.VITE_API + '/auth/logout', {
         method: 'POST',
+        ...(fetchOptions() as RequestInit),
     }).then((res) => res.json());
 };

@@ -1,49 +1,49 @@
-import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { fetchUser } from '../services/user.service';
-import { getJWT } from '../services/auth.service';
-import { IUser } from '../interfaces/IUser';
 import { formatDate } from '../utils/formatDate';
 import Loader from '../components/Loader';
+import useFetch from '../hooks/useFetch';
+import { useContext, useEffect } from 'react';
+import { UserContext } from '../contexts/UserContext';
 
 const Aboutpage = () => {
-    const { data: JWT, isLoading: JWTLoading } = useQuery({
-        queryKey: ['jwt'],
-        queryFn: getJWT,
-    });
-    const {
-        data: userData,
-        isLoading: userLoading,
-    }: { data: IUser | any; isLoading: boolean } = useQuery({
-        queryKey: ['user', getJWT],
-        queryFn: fetchUser,
-        enabled: !!JWT,
-        refetchOnWindowFocus: false,
-    });
-    console.log(JWT, userData);
-    if (JWTLoading || userLoading) {
+    const user = useContext(UserContext);
+    const userData = useFetch(true, !!user?.isAuth);
+    console.log(userData);
+    useEffect(() => {
+        if (user?.setIsAuth && !userData.isAuth) {
+            user.setIsAuth(false);
+        }
+    }, [user, userData.isAuth]);
+    useEffect(() => {
+        userData.fetchData(fetchUser);
+    }, []);
+    if (userData.isLoading) {
         return <Loader />;
     }
+
     return (
         <div>
             <h1 className="title text-center">About me</h1>
             <div className="mt-8 flex flex-col gap-1">
                 <div className="font-medium">
                     Username:{' '}
-                    <span className="text-gray-400">{userData.username}</span>
+                    <span className="text-gray-400">
+                        {userData?.data?.username}
+                    </span>
                 </div>
                 <div className="font-medium">
                     Email:{' '}
                     <span className="link">
-                        <a href={`mailto:${userData.email}`}>
-                            {userData.email}
+                        <a href={`mailto:${userData?.data?.email}`}>
+                            {userData?.data?.email}
                         </a>
                     </span>
                 </div>
                 <div className="font-medium">
                     Date sign up:{' '}
                     <span className="text-gray-400">
-                        {formatDate(new Date(userData.createdAt))}
+                        {formatDate(new Date(userData?.data?.createdAt))}
                     </span>
                 </div>
             </div>

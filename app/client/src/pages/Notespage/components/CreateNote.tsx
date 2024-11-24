@@ -8,7 +8,7 @@ import { INote } from '../../../interfaces/INote';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { createNote } from '../../../services/note.service';
-import { getJWT } from '../../../services/auth.service';
+import { createJWT } from '../../../services/auth.service';
 
 const CreateNote = () => {
     const [isCreateEnabled, setIsCreateEnabled] = useState(false);
@@ -19,7 +19,7 @@ const CreateNote = () => {
     });
     const { data: JWT } = useQuery({
         queryKey: ['jwt'],
-        queryFn: getJWT,
+        queryFn: createJWT,
         enabled: isJWTEnabled,
     });
     const { control, handleSubmit } = useForm({
@@ -31,7 +31,7 @@ const CreateNote = () => {
     });
 
     const { isLoading: isCreateNoteLoading } = useQuery({
-        queryKey: ['createdNote', getJWT],
+        queryKey: ['createdNote', createJWT],
         queryFn: () => {
             setIsCreateEnabled(false);
             setIsJWTEnabled(false);

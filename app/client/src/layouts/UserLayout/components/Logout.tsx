@@ -1,24 +1,25 @@
-import { useState } from 'react';
-import Loader from '../../../components/Loader';
+import { useContext, useEffect } from 'react';
+import { UserContext } from '../../../contexts/UserContext';
+import useFetch from '../../../hooks/useFetch';
 import { logoutUser } from '../../../services/auth.service';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import Loader from '../../../components/Loader';
+import { clearJWT } from '../../../utils/clearJWT';
 
 const Logout = () => {
-    const [enabled, setEnabled] = useState(false);
-    const queryClient = useQueryClient();
-    const { isLoading, isSuccess } = useQuery({
-        queryKey: ['logout'],
-        queryFn: logoutUser,
-        refetchOnWindowFocus: false,
-        enabled,
-    });
-    if (isLoading) return <Loader />;
-    if (isSuccess) {
-        setEnabled(false);
-        queryClient.setQueryData(['jwt'], () => ({ token: '' }));
-    }
+    const user = useContext(UserContext);
+    const logout = useFetch(false, !!user?.isAuth);
+    useEffect(() => {
+        if (user?.setIsAuth && logout.isCompleted) {
+            clearJWT();
+            user.setIsAuth(false);
+        }
+    }, [logout.isCompleted, user]);
+    if (logout.isLoading) return <Loader />;
     return (
-        <a className="link cursor-pointer" onClick={() => setEnabled(true)}>
+        <a
+            className="link cursor-pointer"
+            onClick={() => logout.fetchData(logoutUser)}
+        >
             Logout
         </a>
     );

@@ -10,6 +10,7 @@ const useFetch = <T extends any[]>(
     const [data, setData] = useState<any | null>(null);
     const [isAuth, setIsAuth] = useState<boolean>(wasAuthorized);
     const [isLoading, setIsLoading] = useState(false);
+    const [isCompleted, setIsCompleted] = useState(false);
     const fetchJWT = async () => {
         const jwt = await createJWT();
         console.log(jwt);
@@ -19,11 +20,12 @@ const useFetch = <T extends any[]>(
             clearJWT();
         } else {
             setIsAuth(true);
-            saveJWT(jwt);
+            saveJWT(jwt.token);
         }
     };
     const fetchData = async (cb: (...args: T) => any, ...args: T) => {
         setIsLoading(true);
+        setIsCompleted(false);
         let res = null;
         if (isVerification) {
             await fetchJWT();
@@ -36,10 +38,12 @@ const useFetch = <T extends any[]>(
         }
         setData(res);
         setIsLoading(false);
+        setIsCompleted(true);
     };
 
     return {
         isAuth,
+        isCompleted,
         data,
         isLoading,
         fetchData,

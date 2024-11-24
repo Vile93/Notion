@@ -4,12 +4,12 @@ import { fetchNotes } from '../../services/note.service';
 import { INoteResolve } from '../../interfaces/INoteResolve';
 import { formatDate } from '../../utils/formatDate';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { getJWT } from '../../services/auth.service';
+import { createJWT } from '../../services/auth.service';
 import CreateNote from './components/CreateNote';
 
 const Notespage = () => {
     const { data: notes, isLoading: isfetchNotesLoading } = useQuery({
-        queryKey: ['notes', getJWT],
+        queryKey: ['notes', createJWT],
         queryFn: fetchNotes,
     });
 

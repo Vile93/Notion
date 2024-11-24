@@ -6,12 +6,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { IUserLogin } from '../interfaces/IUserLogin';
 import { useContext, useEffect } from 'react';
 import { loginUser } from '../services/auth.service';
-import { UserContext } from '../App';
 import useFetch from '../hooks/useFetch';
+import { UserContext } from '../contexts/UserContext';
 
 const Loginpage = () => {
-    const auth = useContext(UserContext);
-    const authFetch = useFetch(false, !!auth?.isAuth);
+    const user = useContext(UserContext);
+    const authFetch = useFetch(false, !!user?.isAuth);
     const { control, handleSubmit } = useForm({
         defaultValues: {
             password: '',
@@ -25,10 +25,10 @@ const Loginpage = () => {
     };
 
     useEffect(() => {
-        if (auth?.setIsAuth && authFetch.isAuth) {
-            auth.setIsAuth(true);
+        if (user?.setIsAuth && authFetch.isAuth) {
+            user.setIsAuth(true);
         }
-    }, [auth, authFetch.isAuth]);
+    }, [user, authFetch.isAuth]);
 
     return (
         <div className="flex flex-col items-center">

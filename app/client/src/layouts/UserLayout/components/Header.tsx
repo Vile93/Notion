@@ -1,20 +1,14 @@
-import { useQuery } from '@tanstack/react-query';
 import { NavLink } from 'react-router-dom';
-import { getJWT } from '../../../services/auth.service';
-import { fetchUser } from '../../../services/user.service';
-import { IUser } from '../../../interfaces/IUser';
 import Logout from './Logout';
+import { useContext } from 'react';
+import { UserContext } from '../../../contexts/UserContext';
 const Header = () => {
-    const { data: userData }: { data: IUser | any } = useQuery({
-        queryKey: ['user', getJWT],
-        queryFn: fetchUser,
-        enabled: false,
-    });
+    const user = useContext(UserContext);
 
     return (
         <header className="mb-16 flex justify-between items-center header">
             <div>
-                Hello, <span className="font-bold">{userData?.username}</span>
+                Hello, <span className="font-bold">{user?.user?.username}</span>
             </div>
             <nav className="header-nav">
                 <NavLink to={'/user/about'}>About</NavLink>
