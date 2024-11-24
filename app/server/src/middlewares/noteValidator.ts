@@ -1,14 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import { z } from 'zod';
 import { errorHandler } from '../utils/errorHandler';
-
-const Note = z.object({
-    title: z
-        .string()
-        .trim()
-        .min(1, { message: 'The task title must not be empty.' }),
-    text: z.string(),
-});
+import { NoteSchema } from '../../../shared/src/Schemes/NoteSchema';
 
 export const noteValidator = (
     req: Request,
@@ -17,7 +9,7 @@ export const noteValidator = (
 ) => {
     try {
         const { title, text } = req.body;
-        Note.parse({ title, text });
+        NoteSchema.parse({ title, text });
         next();
     } catch (e) {
         errorHandler(res);

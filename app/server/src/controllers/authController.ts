@@ -57,7 +57,6 @@ export const AuthController = {
     register: async (req: Request, res: Response) => {
         try {
             const { password, email, username } = req.body;
-            console.log(password, email);
 
             const encodedPassword = await BcryptService.createEncryptedValue(
                 password
@@ -89,9 +88,7 @@ export const AuthController = {
                 httpOnly: true,
             });
             res.status(200).json({ token: tokens.accessToken });
-        } catch (e) {
-            console.log(e);
-
+        } catch {
             errorHandler(res);
         }
     },
