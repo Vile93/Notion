@@ -2,7 +2,7 @@ import { Box, Modal, Typography } from '@mui/material';
 import { FC } from 'react';
 import { formatDate } from '../../../utils/formatDate';
 
-interface ICustomModalProps {
+interface INoteInfo {
     title: string;
     open: boolean;
     handleClose: React.Dispatch<React.SetStateAction<boolean>>;
@@ -10,7 +10,7 @@ interface ICustomModalProps {
     text?: string;
 }
 
-const CustomModal: FC<ICustomModalProps> = ({
+const NoteInfo: FC<INoteInfo> = ({
     title,
     text,
     open,
@@ -28,15 +28,21 @@ const CustomModal: FC<ICustomModalProps> = ({
                     boxShadow: 24,
                     padding: '0.5rem',
                     outline: 0,
+                    background: 'rgba(0,0,0,0.8)',
                 }}
             >
                 <div className="text-white">
-                    <Typography>
+                    <Typography className="wrap-anywhere">
                         <span className="font-bold">Title:</span> {title}
                     </Typography>
-                    {text ? <Typography>Text: {text}</Typography> : null}
+                    {text ? (
+                        <Typography className="wrap-anywhere">
+                            <span className="font-bold">Text:</span> {text}
+                        </Typography>
+                    ) : null}
                     <Typography>
-                        Date of creation: {formatDate(new Date(createdAt))}
+                        <span className="font-bold">Date of creation:</span>{' '}
+                        {formatDate(new Date(createdAt))}
                     </Typography>
                 </div>
             </Box>
@@ -44,4 +50,4 @@ const CustomModal: FC<ICustomModalProps> = ({
     );
 };
 
-export default CustomModal;
+export default NoteInfo;

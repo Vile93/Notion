@@ -8,6 +8,7 @@ interface ICustomInputProps {
     placeholder?: string;
     className?: string;
     type?: string;
+    defaultValue?: string;
 }
 
 const CustomInput: FC<ICustomInputProps> = ({
@@ -16,9 +17,11 @@ const CustomInput: FC<ICustomInputProps> = ({
     name,
     className,
     type,
+    defaultValue,
 }) => {
     return (
         <Controller
+            defaultValue={defaultValue}
             name={name}
             control={control}
             render={({ field, fieldState }) => (
