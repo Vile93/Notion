@@ -2,7 +2,7 @@ import { IUserLogin } from '../interfaces/IUserLogin';
 import { IUserRegister } from '../interfaces/IUserRegister';
 import { fetchOptions } from '../utils/fetchOptions';
 
-export const getJWT = () => {
+export const createJWT = () => {
     return fetch(import.meta.env.VITE_API + '/auth/jwt', {
         method: 'POST',
         ...(fetchOptions() as RequestInit),
