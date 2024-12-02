@@ -1,8 +1,3 @@
-```markdown
-# Project README
-
-## Project Structure
-
 ```
 /app
   ├── /client
@@ -66,4 +61,4 @@ To get started with this project, follow these steps:
 
 ## Conclusion
 
-This project combines a modern tech stack with a clear separation of concerns between client and server code. The use of TypeScript and Zod ensures type safety and validation across both sides of the application. Additionally, the implementation of authentication features using `jsonwebtoken` and `bcrypt` enhances security.
+This project combines a modern tech stack with a clear separation of concerns between client and server code. The use of TypeScript and Zod ensures type safety and validation across both sides of the application. Additionally, the implementation of authentication features using `jsonwebtoken` and `bcrypt` enhances security. 
