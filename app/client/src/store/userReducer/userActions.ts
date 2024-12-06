@@ -1,0 +1,4 @@
+export const USER_ACTIONS = {
+    SET_NEW_USER: 'SET_NEW_USER',
+    CLEAR_USER_DATA: 'CLEAR_USER_DATA',
+};
