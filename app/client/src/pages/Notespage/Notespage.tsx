@@ -1,5 +1,5 @@
 import { INoteResolve } from '../../interfaces/INoteResolve';
-import CreateNote from './components/CreateNote';
+import NoteCreate from './components/NoteCreate';
 import useFetch from '../../hooks/useFetch';
 import { UserContext } from '../../contexts/UserContext';
 import { useContext, useEffect } from 'react';
@@ -24,7 +24,7 @@ const Notespage = () => {
     return (
         <div>
             <h1 className="title text-center">Notes</h1>
-            <CreateNote mutateNotes={notes.mutateData} />
+            <NoteCreate mutateNotes={notes.mutateData} />
 
             <div className="flex flex-col gap-2 mt-2">
                 {notes?.data
@@ -36,8 +36,8 @@ const Notespage = () => {
                     ?.map((note: INoteResolve) => (
                         <Note
                             key={note._id}
-                            {...note}
                             mutateNotes={notes.mutateData}
+                            {...note}
                         />
                     ))}
             </div>

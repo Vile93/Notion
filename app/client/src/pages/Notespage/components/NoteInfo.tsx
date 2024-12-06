@@ -2,7 +2,7 @@ import { Box, Modal, Typography } from '@mui/material';
 import { FC } from 'react';
 import { formatDate } from '../../../utils/formatDate';
 
-interface INoteInfo {
+interface INoteInfoProps {
     title: string;
     open: boolean;
     handleClose: React.Dispatch<React.SetStateAction<boolean>>;
@@ -10,7 +10,7 @@ interface INoteInfo {
     text?: string;
 }
 
-const NoteInfo: FC<INoteInfo> = ({
+const NoteInfo: FC<INoteInfoProps> = ({
     title,
     text,
     open,

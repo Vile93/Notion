@@ -27,7 +27,6 @@ const useFetch = (
     };
     const fetchJWT = async () => {
         const jwt = await createJWT();
-        console.log('jwt', jwt);
 
         try {
             saveJWT(jwt?.data?.token);

@@ -18,7 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { NoteSchema } from '../../../../../shared/src/Schemes/NoteSchema';
 import { INoteResolve } from '../../../interfaces/INoteResolve';
 
-interface INoteEdit {
+interface INoteEditProps {
     mutateNotes: React.Dispatch<React.SetStateAction<INoteResolve[]>>;
     title: string;
     open: boolean;
@@ -28,7 +28,7 @@ interface INoteEdit {
     _id: string;
 }
 
-const NoteEdit: FC<INoteEdit> = ({
+const NoteEdit: FC<INoteEditProps> = ({
     open,
     handleClose,
     title,

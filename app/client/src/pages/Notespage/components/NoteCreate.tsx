@@ -11,11 +11,11 @@ import { FC, useContext, useEffect } from 'react';
 import { UserContext } from '../../../contexts/UserContext';
 import { INoteResolve } from '../../../interfaces/INoteResolve';
 
-interface ICreateNoteProps {
+interface INoteCreateProps {
     mutateNotes: React.Dispatch<React.SetStateAction<INoteResolve[]>>;
 }
 
-const CreateNote: FC<ICreateNoteProps> = ({ mutateNotes }) => {
+const NoteCreate: FC<INoteCreateProps> = ({ mutateNotes }) => {
     const user = useContext(UserContext);
     const newNoteFetch = useFetch(true, user?.setIsAuth);
     const { control, handleSubmit } = useForm({
@@ -66,4 +66,4 @@ const CreateNote: FC<ICreateNoteProps> = ({ mutateNotes }) => {
     );
 };
 
-export default CreateNote;
+export default NoteCreate;

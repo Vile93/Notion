@@ -5,7 +5,7 @@ import { logoutUser } from '../../../services/auth.service';
 
 const Logout = () => {
     const user = useContext(UserContext);
-    const logout = useFetch(false, !!user?.isAuth);
+    const logout = useFetch(false, user?.setIsAuth);
     useEffect(() => {
         if (user?.setIsAuth && logout.isCompleted) {
             user.setIsAuth(false);
