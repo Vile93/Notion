@@ -21,7 +21,7 @@ const useFetch = (
             }
             setError({
                 status: true,
-                message: err.response?.data?.message,
+                message: err.response?.data?.message ?? err.message,
             });
         }
     };

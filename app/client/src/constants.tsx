@@ -22,3 +22,5 @@ export const UserLoginSchema = UserSchema.pick({
     email: true,
     password: true,
 });
+
+export const NETWORK_ERROR = 'Network Error';

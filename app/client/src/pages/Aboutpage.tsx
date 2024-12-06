@@ -5,6 +5,8 @@ import Loader from '../components/Loader';
 import useFetch from '../hooks/useFetch';
 import { useContext, useEffect } from 'react';
 import { UserContext } from '../contexts/UserContext';
+import { NETWORK_ERROR } from '../constants';
+import Errorpage from '../components/Errorpage';
 
 const Aboutpage = () => {
     const user = useContext(UserContext);
@@ -17,6 +19,18 @@ const Aboutpage = () => {
             user?.setUser(userData.data);
         }
     }, [userData.isLoading]);
+    if (
+        userData.error.status === true &&
+        userData.error.message === NETWORK_ERROR
+    ) {
+        return (
+            <Errorpage
+                status={'500'}
+                title="Internal Server Error."
+                text="We are already working to solve the problem."
+            />
+        );
+    }
     if (userData.isLoading) {
         return <Loader />;
     }

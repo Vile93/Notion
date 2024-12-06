@@ -6,6 +6,8 @@ import { useContext, useEffect } from 'react';
 import { fetchNotes } from '../../services/note.service';
 import Note from './components/Note';
 import Loader from '../../components/Loader';
+import { NETWORK_ERROR } from '../../constants';
+import Errorpage from '../../components/Errorpage';
 
 const Notespage = () => {
     const user = useContext(UserContext);
@@ -13,7 +15,15 @@ const Notespage = () => {
     useEffect(() => {
         notes.fetchData(fetchNotes);
     }, []);
-
+    if (notes.error.status === true && notes.error.message === NETWORK_ERROR) {
+        return (
+            <Errorpage
+                status={'500'}
+                title="Internal Server Error."
+                text="We are already working to solve the problem."
+            />
+        );
+    }
     if (notes.isLoading) {
         return (
             <div className="text-center mt-8">

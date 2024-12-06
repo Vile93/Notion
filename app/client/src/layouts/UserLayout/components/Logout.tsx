@@ -7,7 +7,11 @@ const Logout = () => {
     const user = useContext(UserContext);
     const logout = useFetch(false, user?.setIsAuth);
     useEffect(() => {
-        if (user?.setIsAuth && logout.isCompleted) {
+        if (
+            user?.setIsAuth &&
+            logout.isCompleted &&
+            logout.error.status === false
+        ) {
             user.setIsAuth(false);
             user.setNotes([]);
             user.setUser(null);
