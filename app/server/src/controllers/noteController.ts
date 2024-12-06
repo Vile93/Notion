@@ -4,7 +4,6 @@ import { errorHandler } from '../utils/errorHandler';
 
 export const NoteController = {
     getNotes: async (req: Request, res: Response) => {
-        //TODO
         try {
             const { userId } = req.body;
             const notes = await NoteModel.find({ userId });
@@ -28,8 +27,18 @@ export const NoteController = {
     },
     editNote: async (req: Request, res: Response) => {
         try {
-            const { title, text } = req.body;
+            const { title, text, userId } = req.body;
             const { noteId } = req.params;
+
+            const candidateNote = await NoteModel.findById(noteId);
+            if (!candidateNote) {
+                errorHandler(res);
+                return;
+            }
+            if (!candidateNote.userId.equals(userId)) {
+                errorHandler(res);
+                return;
+            }
             const updatedNote = await NoteModel.findByIdAndUpdate(
                 {
                     _id: noteId,
@@ -37,7 +46,6 @@ export const NoteController = {
                 { title, text },
                 { new: true }
             );
-
             res.status(200).json(updatedNote);
         } catch {
             errorHandler(res);
@@ -45,7 +53,17 @@ export const NoteController = {
     },
     deleteNote: async (req: Request, res: Response) => {
         try {
+            const { userId } = req.body;
             const { noteId } = req.params;
+            const candidateNote = await NoteModel.findById(noteId);
+            if (!candidateNote) {
+                errorHandler(res);
+                return;
+            }
+            if (!candidateNote.userId.equals(userId)) {
+                errorHandler(res);
+                return;
+            }
             const deletedNote = await NoteModel.findByIdAndDelete({
                 _id: noteId,
             });

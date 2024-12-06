@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import { NoteController } from '../controllers/noteController';
-import { authMiddleware } from '../middlewares/authMiddleware';
 import { noteValidator } from '../middlewares/noteValidator';
 
 export const noteRotuer = Router();
