@@ -7,17 +7,16 @@ import { useForm } from 'react-hook-form';
 import { INote } from '../../../interfaces/INote';
 import { createNote } from '../../../services/note.service';
 import useFetch from '../../../hooks/useFetch';
-import { FC, useContext, useEffect } from 'react';
-import { UserContext } from '../../../contexts/UserContext';
+import { FC, useEffect } from 'react';
 import { INoteResolve } from '../../../interfaces/INoteResolve';
+import { USER_ACTIONS } from '../../../store/userReducer/userActions';
 
 interface INoteCreateProps {
     mutateNotes: React.Dispatch<React.SetStateAction<INoteResolve[]>>;
 }
 
 const NoteCreate: FC<INoteCreateProps> = ({ mutateNotes }) => {
-    const user = useContext(UserContext);
-    const newNoteFetch = useFetch(true, user?.setIsAuth);
+    const newNoteFetch = useFetch(true, USER_ACTIONS.AUTH, USER_ACTIONS.UNAUTH);
     const { control, handleSubmit } = useForm({
         defaultValues: {
             title: '',

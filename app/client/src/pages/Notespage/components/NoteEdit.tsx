@@ -5,18 +5,18 @@ import {
     Modal,
     Typography,
 } from '@mui/material';
-import React, { FC, useContext, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { formatDate } from '../../../utils/formatDate';
 import CustomInput from '../../../components/CustomInput';
 import { useForm } from 'react-hook-form';
 import { INote } from '../../../interfaces/INote';
 import useFetch from '../../../hooks/useFetch';
 import { editNote } from '../../../services/note.service';
-import { UserContext } from '../../../contexts/UserContext';
 import { PLACEHOLDRS } from '../../../constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { NoteSchema } from '../../../../../shared/src/Schemes/NoteSchema';
 import { INoteResolve } from '../../../interfaces/INoteResolve';
+import { USER_ACTIONS } from '../../../store/userReducer/userActions';
 
 interface INoteEditProps {
     mutateNotes: React.Dispatch<React.SetStateAction<INoteResolve[]>>;
@@ -44,8 +44,11 @@ const NoteEdit: FC<INoteEditProps> = ({
         },
         resolver: zodResolver(NoteSchema),
     });
-    const user = useContext(UserContext);
-    const editNoteFetch = useFetch(true, user?.setIsAuth);
+    const editNoteFetch = useFetch(
+        true,
+        USER_ACTIONS.AUTH,
+        USER_ACTIONS.UNAUTH
+    );
     const onSubmit = (note: INote) => {
         editNoteFetch.fetchData(editNote, _id, note);
     };

@@ -1,24 +1,27 @@
-import { FC, useContext, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { INoteResolve } from '../../../interfaces/INoteResolve';
 import { formatDate } from '../../../utils/formatDate';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CircularProgress, Grid } from '@mui/material';
 import useFetch from '../../../hooks/useFetch';
-import { UserContext } from '../../../contexts/UserContext';
 import { deleteNote } from '../../../services/note.service';
 import NoteInfo from './NoteInfo';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import EditIcon from '@mui/icons-material/Edit';
 import useModal from '../../../hooks/useModal';
 import NoteEdit from './NoteEdit';
+import { USER_ACTIONS } from '../../../store/userReducer/userActions';
 
 interface INoteProps extends INoteResolve {
     mutateNotes: React.Dispatch<React.SetStateAction<INoteResolve[]>>;
 }
 
 const Note: FC<INoteProps> = ({ _id, createdAt, title, text, mutateNotes }) => {
-    const user = useContext(UserContext);
-    const deleteNoteFetch = useFetch(true, user?.setIsAuth);
+    const deleteNoteFetch = useFetch(
+        true,
+        USER_ACTIONS.AUTH,
+        USER_ACTIONS.UNAUTH
+    );
     const showNoteInfo = useModal();
     const editNoteInfo = useModal();
 
