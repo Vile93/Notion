@@ -21,7 +21,10 @@ const Aboutpage = () => {
     }, []);
     useEffect(() => {
         if (!user.data && userFetch.data && !userFetch.data?.token) {
-            dispatch({ type: USER_ACTIONS.SET_DATA, payload: userFetch.data });
+            dispatch({
+                type: USER_ACTIONS.SET_DATA,
+                payload: { data: { ...userFetch.data } },
+            });
         }
     }, [userFetch.data]);
     if (
