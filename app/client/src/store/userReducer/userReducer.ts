@@ -23,14 +23,12 @@ const initialState: UserStore = {
     data: JSON.parse(localStorage.getItem('user') ?? 'null'),
 };
 
-export function userReducer(state = initialState, action: Action): UserStore {
+export function userReducer(state = initialState, action: Action) {
     switch (action.type) {
         case USER_ACTIONS.SET_DATA:
             return {
                 ...state,
-                data: {
-                    ...action.payload,
-                },
+                ...action.payload,
             };
         case USER_ACTIONS.CLEAR_USER_DATA:
             return {
@@ -43,7 +41,6 @@ export function userReducer(state = initialState, action: Action): UserStore {
             return { ...state, isAuth: true };
         case USER_ACTIONS.UNAUTH:
             return { ...state, isAuth: false };
-
         default:
             return state;
     }
