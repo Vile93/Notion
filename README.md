@@ -1,3 +1,10 @@
+# Notion Project
+
+![notion1](https://github.com/user-attachments/assets/dafa5647-4f53-4b4d-93c1-22d6972a5e0a)
+![notion2](https://github.com/user-attachments/assets/919f1218-899a-4b10-a8a5-d6cbc461e62c)
+![notion3](https://github.com/user-attachments/assets/024d986e-b42d-4a62-8566-8127dec2a184)
+![notion4](https://github.com/user-attachments/assets/05547c05-1146-449e-870a-c081f9de468a)
+
 ## Project Structure
 
 ```
