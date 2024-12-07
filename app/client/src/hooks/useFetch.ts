@@ -1,15 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createJWT } from '../services/auth.service';
 import { saveJWT } from '../utils/saveJWT';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
 
 const useFetch = (
     isVerification: boolean,
-    setAuth?: React.Dispatch<React.SetStateAction<boolean>>
+    authSuccessAction?: string,
+    authFailAction?: string
 ) => {
+    const dispatch = useDispatch();
     const [data, setData] = useState<any | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isCompleted, setIsCompleted] = useState(false);
+    const [isAuth, setIsAuth] = useState(!!localStorage.getItem('jwt'));
     const [error, setError] = useState({
         status: false,
         message: '',
@@ -17,7 +21,7 @@ const useFetch = (
     const errorHandler = (err: Error) => {
         if (axios.isAxiosError(err)) {
             if (err?.status === 401) {
-                if (setAuth) setAuth(false);
+                setIsAuth(false);
             }
             setError({
                 status: true,
@@ -30,7 +34,7 @@ const useFetch = (
 
         try {
             saveJWT(jwt?.data?.token);
-            if (setAuth) setAuth(true);
+            setIsAuth(true);
         } catch (err) {
             errorHandler(err as Error);
         }
@@ -49,8 +53,9 @@ const useFetch = (
         if (!isVerification) {
             try {
                 res = await cb(...args);
-                if (res.data?.token && setAuth) {
-                    setAuth(true);
+                if (res.data?.token) {
+                    setIsAuth(true);
+                    saveJWT(res.data.token);
                 }
             } catch (err) {
                 errorHandler(err as Error);
@@ -59,7 +64,7 @@ const useFetch = (
             try {
                 await fetchJWT();
                 res = await cb(...args);
-                if (setAuth) setAuth(true);
+                setIsAuth(true);
             } catch (err) {
                 errorHandler(err as Error);
             }
@@ -68,9 +73,18 @@ const useFetch = (
         setIsLoading(false);
         setIsCompleted(true);
     };
-
+    useEffect(() => {
+        if (authSuccessAction && authFailAction) {
+            if (isAuth) {
+                dispatch({ type: authSuccessAction });
+            } else {
+                dispatch({ type: authFailAction });
+            }
+        }
+    }, [isAuth]);
     return {
         isCompleted,
+        isAuth,
         data,
         error,
         isLoading,
