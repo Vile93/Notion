@@ -64,7 +64,7 @@ const useFetch = (
             try {
                 await fetchJWT();
                 res = await cb(...args);
-                setIsAuth(true);
+                // setIsAuth(true);
             } catch (err) {
                 errorHandler(err as Error);
             }
@@ -74,14 +74,14 @@ const useFetch = (
         setIsCompleted(true);
     };
     useEffect(() => {
-        if (authSuccessAction && authFailAction) {
+        if (authSuccessAction && authFailAction && isCompleted) {
             if (isAuth) {
                 dispatch({ type: authSuccessAction });
             } else {
                 dispatch({ type: authFailAction });
             }
         }
-    }, [isAuth]);
+    }, [isCompleted]);
     return {
         isCompleted,
         isAuth,
