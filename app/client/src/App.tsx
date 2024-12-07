@@ -73,7 +73,7 @@ function App() {
             },
         }
     );
-    if (user.data) localStorage.setItem('user', JSON.stringify(user));
+    if (user.data) localStorage.setItem('user', JSON.stringify(user.data));
     if (!user.isAuth) localStorage.clear();
     return (
         <RouterProvider router={router} future={{ v7_startTransition: true }} />

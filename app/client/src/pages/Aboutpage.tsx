@@ -22,7 +22,6 @@ const Aboutpage = () => {
     useEffect(() => {
         if (!user.data && userFetch.data && !userFetch.data?.token) {
             dispatch({ type: USER_ACTIONS.SET_DATA, payload: userFetch.data });
-            console.log(userFetch.data);
         }
     }, [userFetch.data]);
     if (
@@ -40,7 +39,6 @@ const Aboutpage = () => {
     if (userFetch.isLoading) {
         return <Loader />;
     }
-    console.log(user);
     return (
         <div>
             <h1 className="title text-center">About me</h1>
