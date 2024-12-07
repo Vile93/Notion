@@ -5,13 +5,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import CustomInput from '../components/CustomInput';
 import { IUserRegister } from '../interfaces/IUserRegister';
 import { registerUser } from '../services/auth.service';
-import { useContext } from 'react';
 import useFetch from '../hooks/useFetch';
-import { UserContext } from '../contexts/UserContext';
+import { useDispatch } from 'react-redux';
+import { USER_ACTIONS } from '../store/userReducer/userActions';
+import { saveJWT } from '../utils/saveJWT';
+import { useEffect } from 'react';
 
 const Registerpage = () => {
-    const user = useContext(UserContext);
-    const authFetch = useFetch(false, user?.setIsAuth);
+    const authFetch = useFetch(false);
+    const dispatch = useDispatch();
     const { control, handleSubmit } = useForm({
         resolver: zodResolver(UserRegisterSchema),
         defaultValues: {
@@ -25,6 +27,14 @@ const Registerpage = () => {
     const onSubmit = async (data: IUserRegister) => {
         authFetch.fetchData(registerUser, { ...data });
     };
+    useEffect(() => {
+        if (authFetch.isAuth) {
+            saveJWT(authFetch.data?.token);
+            dispatch({
+                type: USER_ACTIONS.AUTH,
+            });
+        }
+    }, [authFetch.isAuth]);
     return (
         <div className="flex flex-col items-center">
             <h1 className="title">Sign up</h1>

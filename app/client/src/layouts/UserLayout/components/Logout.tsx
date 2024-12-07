@@ -1,27 +1,22 @@
-import { useContext, useEffect } from 'react';
-import { UserContext } from '../../../contexts/UserContext';
+import { useEffect } from 'react';
 import useFetch from '../../../hooks/useFetch';
 import { logoutUser } from '../../../services/auth.service';
+import { USER_ACTIONS } from '../../../store/userReducer/userActions';
+import { useDispatch } from 'react-redux';
 
 const Logout = () => {
-    const user = useContext(UserContext);
-    const logout = useFetch(false, user?.setIsAuth);
+    const logoutFetch = useFetch(false);
+    const dispatch = useDispatch();
     useEffect(() => {
-        if (
-            user?.setIsAuth &&
-            logout.isCompleted &&
-            logout.error.status === false
-        ) {
-            user.setIsAuth(false);
-            user.setNotes([]);
-            user.setUser(null);
+        if (logoutFetch.isCompleted && logoutFetch.error.status === false) {
+            dispatch({ type: USER_ACTIONS.CLEAR_USER_DATA });
             localStorage.clear();
         }
-    }, [logout.isCompleted, user]);
+    }, [dispatch, logoutFetch.error.status, logoutFetch.isCompleted]);
     return (
         <a
             className="link cursor-pointer"
-            onClick={() => logout.fetchData(logoutUser)}
+            onClick={() => logoutFetch.fetchData(logoutUser)}
         >
             Logout
         </a>

@@ -4,15 +4,16 @@ import { PLACEHOLDRS, UserLoginSchema } from '../constants';
 import CustomInput from '../components/CustomInput';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { IUserLogin } from '../interfaces/IUserLogin';
-import { useContext } from 'react';
 import { loginUser } from '../services/auth.service';
 import useFetch from '../hooks/useFetch';
-import { UserContext } from '../contexts/UserContext';
+import { useDispatch } from 'react-redux';
+import { USER_ACTIONS } from '../store/userReducer/userActions';
+import { saveJWT } from '../utils/saveJWT';
+import { useEffect } from 'react';
 
 const Loginpage = () => {
-    const user = useContext(UserContext);
-    const authFetch = useFetch(false, user?.setIsAuth);
-
+    const authFetch = useFetch(false);
+    const dispatch = useDispatch();
     const { control, handleSubmit } = useForm({
         defaultValues: {
             password: '',
@@ -21,6 +22,14 @@ const Loginpage = () => {
         mode: 'onChange',
         resolver: zodResolver(UserLoginSchema),
     });
+    useEffect(() => {
+        if (authFetch.isAuth) {
+            saveJWT(authFetch.data?.token);
+            dispatch({
+                type: USER_ACTIONS.AUTH,
+            });
+        }
+    }, [authFetch]);
 
     const onSubmit = async (data: IUserLogin) => {
         authFetch.fetchData(loginUser, { ...data });

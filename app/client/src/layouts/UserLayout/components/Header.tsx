@@ -1,16 +1,15 @@
 import { NavLink } from 'react-router-dom';
 import Logout from './Logout';
-import { useContext } from 'react';
-import { UserContext } from '../../../contexts/UserContext';
-const Header = () => {
-    const user = useContext(UserContext);
+import { connect, ConnectedProps } from 'react-redux';
+import { AppStore } from '../../../store/store';
 
+const Header = ({ username }: PropsFromRedux) => {
     return (
         <header className="mb-16 flex justify-between items-center header">
             <div>
                 Hello,{' '}
                 <span className="font-bold">
-                    {user?.user?.username ??
+                    {username?.toString() ??
                         JSON.parse(localStorage.getItem('user') ?? '{}')
                             ?.username}
                 </span>
@@ -24,4 +23,10 @@ const Header = () => {
     );
 };
 
-export default Header;
+const mapStateToProps = (state: AppStore) => ({
+    username: state.data?.username,
+});
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(Header);
