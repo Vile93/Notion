@@ -12,14 +12,14 @@ import Registerpage from './pages/Registerpage';
 import NotFoundpage from './pages/NotFoundpage';
 import AuthErrorLayout from './layouts/AuthLayout/AuthErrorLayout';
 import UserErrorLayout from './layouts/UserLayout/UserErrorLayout';
-import { useContext } from 'react';
-import { UserContext } from './contexts/UserContext';
+import { useSelector } from 'react-redux';
+import { userSelector } from './store/userReducer/userSelectors';
 
 function App() {
-    const user = useContext(UserContext);
+    const user = useSelector(userSelector);
     const router = createBrowserRouter(
         [
-            !user?.isAuth
+            !user.isAuth
                 ? {
                       path: '/',
                       element: <AuthLayout />,
@@ -73,7 +73,8 @@ function App() {
             },
         }
     );
-
+    if (user.data) localStorage.setItem('user', JSON.stringify(user));
+    if (!user.isAuth) localStorage.clear();
     return (
         <RouterProvider router={router} future={{ v7_startTransition: true }} />
     );
