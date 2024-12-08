@@ -15,10 +15,11 @@ export const UserContext = createContext<IUserContext | null>(null);
 import React from 'react';
 import { IUser } from '../interfaces/IUser';
 import { INoteResolve } from '../interfaces/INoteResolve';
+import { fetchLocalUser } from '../utils/fetchLocalUser';
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const [isAuth, setIsAuth] = useState(!!localStorage.getItem('jwt'));
-    const [user, setUser] = useState<IUser | null>(null);
+    const [user, setUser] = useState<IUser | null>(fetchLocalUser());
     const [notes, setNotes] = useState<INoteResolve[]>([]);
     useEffect(() => {
         if (!isAuth) {

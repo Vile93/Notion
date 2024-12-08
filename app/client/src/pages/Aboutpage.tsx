@@ -10,15 +10,18 @@ import Errorpage from '../components/Errorpage';
 
 const Aboutpage = () => {
     const user = useContext(UserContext);
+
     const userData = useFetch(true, user?.setIsAuth);
     useEffect(() => {
-        userData.fetchData(fetchUser);
+        if (!user?.user) {
+            userData.fetchData(fetchUser);
+        }
     }, []);
     useEffect(() => {
-        if (!userData.isLoading) {
+        if (userData.isCompleted) {
             user?.setUser(userData.data);
         }
-    }, [userData.isLoading]);
+    }, [userData.isCompleted]);
     if (
         userData.error.status === true &&
         userData.error.message === NETWORK_ERROR
@@ -41,23 +44,25 @@ const Aboutpage = () => {
                 <div className="font-medium">
                     Username:{' '}
                     <span className="text-gray-400">
-                        {userData?.data?.username}
+                        {user?.user?.username}
                     </span>
                 </div>
                 <div className="font-medium">
                     Email:{' '}
                     <span className="link">
                         <a href={`mailto:${userData?.data?.email}`}>
-                            {userData?.data?.email}
+                            {user?.user?.email}
                         </a>
                     </span>
                 </div>
-                <div className="font-medium">
-                    Date sign up:{' '}
-                    <span className="text-gray-400">
-                        {formatDate(new Date(userData?.data?.createdAt))}
-                    </span>
-                </div>
+                {user?.user?.createdAt ? (
+                    <div className="font-medium">
+                        Date sign up:{' '}
+                        <span className="text-gray-400">
+                            {formatDate(new Date(user?.user.createdAt))}
+                        </span>
+                    </div>
+                ) : null}
             </div>
             <div className="text-center mt-8">
                 <Link to={'/user/notes'} className="link text-2xl px-4">
