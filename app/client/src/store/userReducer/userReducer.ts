@@ -1,4 +1,5 @@
 import { IUser } from '../../interfaces/IUser';
+import { fetchLocalUser } from '../../utils/fetchLocalUser';
 import { USER_ACTIONS } from './userActions';
 
 type UserStore = {
@@ -20,7 +21,7 @@ export type Action =
 
 const initialState: UserStore = {
     isAuth: !!localStorage.getItem('jwt'),
-    data: JSON.parse(localStorage.getItem('user') ?? 'null'),
+    data: fetchLocalUser(),
 };
 
 export function userReducer(state = initialState, action: Action) {
